@@ -32,6 +32,7 @@ async function run() {
 
 
         const cardCollection = client.db("collegeDB").collection("collegeCardData");
+        const collegeCollection = client.db("collegeDB").collection("collegeData");
 
 
 
@@ -39,6 +40,12 @@ async function run() {
 
         app.get("/collegedata", async (req, res) => {
             const cursor = cardCollection.find();
+            const result = await cursor.toArray()
+            res.send(result)
+        })
+
+        app.get("/data", async (req, res) => {
+            const cursor = collegeCollection.find();
             const result = await cursor.toArray()
             res.send(result)
         })
@@ -51,9 +58,24 @@ async function run() {
             res.send(result);
         })
 
+        app.get("/data/:id", async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) }
+            const result = await collegeCollection.findOne(query)
+            res.send(result);
+        })
+
+
         app.post("/collegedata", async (req, res) => {
-            const toys = req.body;
-            const result = await cardCollection.insertOne(toys)
+            const data = req.body;
+            const result = await cardCollection.insertOne(data)
+            res.send(result)
+        })
+
+
+        app.post("/data", async (req, res) => {
+            const collegeData = req.body;
+            const result = await collegeCollection.insertOne(collegeData)
             res.send(result)
         })
 
