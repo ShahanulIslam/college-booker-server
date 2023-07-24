@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 require('dotenv').config();
 const port = process.env.PORT || 3500
 
@@ -44,6 +44,18 @@ async function run() {
         })
 
 
+        app.get("/collegedata/:id", async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) }
+            const result = await cardCollection.findOne(query)
+            res.send(result);
+        })
+
+        app.post("/collegedata", async (req, res) => {
+            const toys = req.body;
+            const result = await cardCollection.insertOne(toys)
+            res.send(result)
+        })
 
 
 
